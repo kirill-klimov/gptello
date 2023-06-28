@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        font-family: 'IBM Plex Mono', Arial;
+        @apply text-text-500 bg-neutral-100 text-base
+    }
+
+    .arial-page {
+        font-family: Arial !important;
+    }
+
+    [data-headlessui-state] {
+        @apply outline-none
+    }
+
+    .header__search-input:focus + .header__search-svg { @apply stroke-text-500 }
+
+    .boards__board-star { @apply translate-x-3 opacity-0 transition-all };
+    .boards__board-container:hover .boards__board-star {
+        @apply translate-x-0 opacity-100
+    }
+
+    .list-view-container::-webkit-scrollbar { @apply bg-transparent h-3 };
+    .list-view-container::-webkit-scrollbar-track {
+        @apply bg-gray-500/50 rounded-md mx-10
+    };
+    .list-view-container::-webkit-scrollbar-thumb {
+        @apply bg-gray-300/50 rounded-md
+    };
+
+    .card-scroll::-webkit-scrollbar { @apply bg-transparent w-[6px] };
+    .card-scroll::-webkit-scrollbar-track {
+        @apply bg-gray-200 rounded-xl
+    };
+    .card-scroll::-webkit-scrollbar-thumb {
+        @apply bg-gray-300 rounded-xl
+    };
+
+    .card-item:hover .card-edit-icon { @apply opacity-100 }
+
+    .card-content:focus .card-content__placeholder { @apply opacity-0 }
+
+    ol { @apply list-decimal }
+    ul { @apply list-disc }
+
+    @keyframes editor {
+        from { @apply translate-y-2 opacity-0 }
+        to { @apply translate-y-0 opacity-100 }
+    }
+    .animate-editor {
+        animation: editor 150ms linear forwards;
+    }
+
+    .editor-input p, 
+    .editor-input ul,  
+    .editor-input ol,
+    .editor-input blockquote
+    { @apply mb-4 }
+
+    .editor-input h2
+    { @apply mb-2 }
+
+    @keyframes generatingBoard {
+        0% { width: 0%; }
+        5% { width: 5%; }
+        10% { width: 10%; }
+        15% { width: 15%; }
+        20% { width: 20% }
+        25% { width: 25%; }
+        30% { width: 30%; }
+        35% { width: 35%; }
+        40% { width: 40%; }
+        45% { width: 45%; }
+        50% { width: 50%; }
+        55% { width: 55%; }
+        60% { width: 60%; }
+        65% { width: 65%; }
+        70% { width: 70%; }
+        75% { width: 75%; }
+        80% { width: 80%; }
+        85% { width: 85%; }
+        90% { width: 90%; }
+        95% { width: 95%; }
+        100% { width: 100%; }
+    }
+    .animate-generating-board {
+        animation: generatingBoard 20s ease-in-out forwards;
+    }
+
+    @keyframes menuContainer {
+        from { grid-template-columns: 0fr; }
+        to { grid-template-columns: 1fr; }
+    }
+    .menu-container {
+        height: calc(100vh - 48px);
+        display: grid;
+        grid-template-columns: 0fr;
+        grid-template-rows: auto;
+        place-content: stretch end;
+        animation: menuContainer 200ms ease-out forwards;
+    }
+}
+
+@keyframes toastEnter {
+    from { transform: translateY(50%) scale(0.9); opacity: 0; }
+    to { transform: none; opacity: 1;}
+}
+
+@keyframes toastLeave {
+    from { transform: none; opacity: 1; }
+    to { transform: translateY(50%) scale(0.9); opacity: 0; }
+}
+
+@layer utilities {
+    .canvas {
+        @apply absolute top-0 left-0 w-full h-full
+    }
+
+    .link {
+        @apply text-primary-500 hover:underline font-medium
+    }
+
+    .logo-shadow {
+        box-shadow: 0px 0px 75px 0px rgba(121,76,173,1);
+        transition: .3s all ease-in-out;
+    }
+    .logo-shadow-box:hover .logo-shadow {
+        box-shadow: 0px 0px 75px 35px rgba(121,76,173,1);
+    }
+
+    .toast-enter { animation: toastEnter .2s ease-in-out forwards; }
+    .toast-leave { animation: toastLeave .2s ease-in-out forwards; }
+
+    .path-fill-primary-600 > path {
+        @apply fill-primary-600
+    }
+
+    .star:hover > svg {
+        @apply stroke-yellow-500 scale-[1.2] active:scale-100
+    } 
+    
+    .board-dropdown-item:hover .star-container {
+        @apply opacity-100
+    }
+
+    .red-button { @apply !bg-red-600 hover:!bg-red-700 !ring-red-600/50 active:!bg-red-800 }
+
+    @keyframes fadeIn {
+        0% { opacity: 0; } 
+        100% { opacity: 1 }
+    }
+    .fade-in { animation: fadeIn 100ms ease-in-out forwards; }
+    .fade-in-long { animation: fadeIn 500ms ease-in-out forwards; }
+
+    .popover {
+        @apply bg-white border shadow p-3 w-[275px] absolute top-10 left-0
+    }
+}

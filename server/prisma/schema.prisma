@@ -1,0 +1,135 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Theme {
+  Dark
+  Light
+}
+
+model User {
+  id              String   @id @default(uuid())
+  login           String   @unique()
+  password        String
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+  avatar_name     String
+  preferred_theme Theme    @default(Light)
+
+  starred_boards  Board[]                   @relation("StarredBoards")
+  boards          Board[]                   @relation("UsersOnBoards")
+  users_on_boards UsersOnBoards[]
+  recent_boards   LastAccessedBoardByUser[]
+  notifications   Notification[]
+}
+
+enum NotificationType {
+  Invite
+  Info
+}
+
+enum NotificationStatus {
+  Read
+  Unread
+}
+
+model Notification {
+  id         String             @id @default(uuid())
+  content    String
+  user       User               @relation(fields: [user_id], references: [id])
+  user_id    String
+  status     NotificationStatus @default(Unread)
+  type       NotificationType
+  created_at DateTime           @default(now())
+  updated_at DateTime           @updatedAt
+}
+
+enum Visibility {
+  Public
+  Authorized
+  Private
+}
+
+enum BackgroundType {
+  Color
+  Image
+}
+
+model Board {
+  id               String     @id @default(uuid())
+  name             String
+  created_at       DateTime   @default(now())
+  updated_at       DateTime   @updatedAt
+  background_value String
+  background_type  BackgroundType
+  visibility       Visibility @default(Private)
+  description      String?
+  closed_at        DateTime?
+
+  starred_by_users User[]                    @relation("StarredBoards")
+  users            User[]                    @relation("UsersOnBoards")
+  users_on_boards  UsersOnBoards[]
+  recent_users     LastAccessedBoardByUser[]
+
+  lists List[]
+}
+
+model LastAccessedBoardByUser {
+  user          User     @relation(fields: [user_id], references: [id])
+  user_id       String
+  board         Board    @relation(fields: [board_id], references: [id], onDelete: Cascade)
+  board_id      String
+  last_accessed DateTime @default(now())
+
+  @@id([user_id, board_id])
+}
+
+enum BoardRole {
+  OWNER
+  EDITOR
+}
+
+model UsersOnBoards {
+  user       User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id    String
+  board      Board     @relation(fields: [board_id], references: [id], onDelete: Cascade)
+  board_id   String
+  role       BoardRole @default(EDITOR)
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+
+  @@id([user_id, board_id])
+}
+
+model List {
+  id         String   @id @default(uuid())
+  name       String
+  order      Int      @default(0)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  board    Board  @relation(fields: [board_id], references: [id], onDelete: Cascade)
+  board_id String
+
+  cards Card[] 
+}
+
+model Card {
+  id         String   @id @default(uuid())
+  name       String
+  order      Int      @default(0)
+  content    String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  list    List   @relation(fields: [list_id], references: [id], onDelete: Cascade)
+  list_id String
+}

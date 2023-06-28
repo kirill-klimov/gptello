@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+      "module": "nodenext",
+      "target": "ESNext",
+      "lib": ["ESNext", "DOM"],
+      "sourceMap": true,
+      "outDir": "./dist",
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "strictPropertyInitialization": false,
+    },
+    "exclude": [
+      "node_modules",
+      "dist"
+    ]
+}
